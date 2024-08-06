@@ -1,4 +1,3 @@
-const listaAnimes = require("../mocks/listaAnimes");
 const animesModel = require("../models/animesModel");
 
 async function middlewareGetAnimeById(req, res, next){

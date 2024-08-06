@@ -1,11 +1,9 @@
-const listaAnimes = require("../mocks/listaAnimes");
 const animesModel = require("../models/animesModel");
 
 async function getAllAnimes(req, res) {
     const animes = await animesModel.getAllAnimesModel();
 
     return res.send(animes);
-
 }
 
 async function getAnimeById(req, res) {

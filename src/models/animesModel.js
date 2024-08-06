@@ -46,6 +46,8 @@ async function deleteAnimeModel(id){
     await connection.query(
         `DELETE FROM animes WHERE id = ${id}`
     )
+
+    return;
 }
 
 module.exports = {
