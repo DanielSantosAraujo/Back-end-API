@@ -1,3 +1,5 @@
+const userModel = require('../models/usersModel');
+
 async function insertUserMiddleware(req, res, next){
     const { nome, email, senha } = req.body;
 
@@ -16,6 +18,35 @@ async function insertUserMiddleware(req, res, next){
     next();
 }
 
+async function middlewareGetUserById(req, res, next){
+    const {id} = req.params;
+    // const user = await userModel.getUserByIdModel(id);
+
+    if(!id) {
+        return res.status(400).send("Dados inválidos");
+    }
+
+    next();
+}
+
+async function middlewareDeleteUser(req, res, next){
+    const {id} = req.params;
+
+    if(!id){
+        return res.status(400).send("Dados incompletos");
+    }
+
+    const user = await userModel.getUserByIdModel(id)
+
+    if(!user){
+        return res.status(404).send("Usuário não encontrado");
+    }
+
+    next();
+}
+
 module.exports = {
-    insertUserMiddleware
+    insertUserMiddleware,
+    middlewareGetUserById,
+    middlewareDeleteUser
 }

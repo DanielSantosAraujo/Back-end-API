@@ -9,5 +9,13 @@ router.post(
     userController.createUser
 );
 
+router.get("/user/:id",
+usersMiddleware.middlewareGetUserById,
+userController.getUserById);
+
+router.delete("/user/:id",
+usersMiddleware.middlewareDeleteUser,
+userController.deleteUser);
+
 
 module.exports = router;

@@ -1,29 +1,15 @@
-const userModel = require('../models/usersModel')
-const dotEnv = require('dotenv');
-const crypto = require('crypto');
-dotEnv.config();
+const userModel = require('../models/usersModel');
+const encryptPassword = require('../helpers/encryptPassword');
+const decryptPassword = require('../helpers/decryptPassword');
 
 async function createUser(req, res) {
     const { nome, email, senha } = req.body;
 
-    const secret_key = process.env.SECRET_KEY;
+    const pass = await encryptPassword(senha);
 
-    const hash = crypto
-    .createHash('sha256')
-    .update(secret_key)
-    .digest('base64')
-    .substr(0, 32);
+    // const decrypted = decryptPassword(pass);
 
-    const iv = crypto.randomBytes(16);
-
-    const cipher = 
-        crypto.createCipheriv('aes-256-cbc', hash, iv);
-
-    let encrypted = cipher.update(senha)
-    encrypted = Buffer.concat([encrypted, cipher.final()]);
-    
-    const pass =
-        iv.toString('hex') + ':' + encrypted.toString('hex');
+    // console.log(decrypted);
 
     try {
         await userModel.insertUserModel(nome, email, pass);
@@ -34,6 +20,32 @@ async function createUser(req, res) {
     return res.status(201).send("Usuário inserido com sucesso!");
 }
 
+async function getUserById(req, res) {
+    const { id } = req.params;
+
+    try {
+        var user = await userModel.getUserByIdModel(id);
+    } catch (error) {
+        return res.status(400).send(error.message);
+    }
+
+    return res.status(200).send(user);
+}
+
+
+async function deleteUser(req, res) {
+    const { id } = req.params;
+
+    try {
+        await userModel.deleteUserByIdModel(id);
+    } catch (error) {
+        return res.status(400).send(error.message);
+    }
+
+    return res.status(200).send("Usuário deletado com sucesso");
+}
 module.exports = {
     createUser,
+    getUserById,
+    deleteUser
 }
