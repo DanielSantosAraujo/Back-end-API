@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const animeController = require("../controllers/anime-controller");
 const middlewareAnimes = require('../middlewares/anime-middlewares');
-
+const validateMiddleware = require('../middlewares/validate-middlewares');
 
 router.get('/animes', animeController.getAllAnimes);
 router.get(
@@ -11,6 +11,7 @@ router.get(
     animeController.getAnimeById);
 router.post(
     '/animes',
+    validateMiddleware,
     middlewareAnimes.middlewareSetAnime,
     animeController.setNovoAnime);
 router.put(
